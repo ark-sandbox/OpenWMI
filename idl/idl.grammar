@@ -1,0 +1,224 @@
+(1) <interface> ::= <interface_header> { <interface_body> }
+(2) <interface_header> ::= <[>  <interface_attributes> <]> interface 
+	<Identifier>
+(3) <interface_attributes> ::= <interface_attribute> 
+	[ , <interface_attribute> ] ...
+
+(4) <interface_attribute> ::= uuid ( <Uuid_rep> )
+	| version ( <Integer_literal>[.<Integer_literal>]) 
+	| endpoint ( <port_spec> [ , <port_spec> ] ... ) 
+	| exceptions ( <excep_name> [ , <excep_name> ] ... )
+	| local
+	| pointer_default ( <ptr_attr> )
+(5) <port_spec> ::=  <Family_string> :  <[> <Port_string> <]>
+(5.01) <excep_name> ::= <Identifier>
+(6) <interface_body> ::= [ <import> ... ] <interface_component>
+	[ <interface_component> ... ]
+(7) <import> ::= import <import_list> ;
+(8) <interface_component> ::= <export> | <op_declarator> ;
+(9) <export> ::= <type_declarator> ; 
+	| <const_declarator> ;
+	| <tagged_declarator> ;
+(10) <import_list> ::= <import_name> [ , <import_name> ] ...
+(11) <import_name> ::=  "<Import_string>"
+(12) <const_declarator> ::= const <const_type_spec> <Identifier> = <const_exp>
+(13) <const_type_spec> ::= <primitive_integer_type> 
+	| char
+	| boolean
+	| void *
+	| char *
+(14) <const_exp> ::= <integer_const_exp> 
+	| <Identifier> 
+	| <string> 
+	| <character_constant>
+	| NULL 
+	| TRUE 
+	| FALSE
+(14.01) <integer_const_exp> ::= <conditional_exp>
+(14.02) <conditional_exp> ::= <logical_or_exp>
+	| <logical_or_exp> ? <integer_const_exp> : <conditional_exp>
+(14.03) <logical_or_exp> ::= <logical_and_exp>
+	| <logical_or_exp> <||> <logical_and_exp>
+(14.04) <logical_and_exp> ::= <inclusive_or_exp>
+	| <logical_and_exp> && <inclusive_or_exp>
+(14.05) <inclusive_or_exp> ::= <exclusive_or_exp>
+	| <inclusive_or_exp> <|> <exclusive_or_exp>
+(14.06) <exclusive_or_exp> ::= <and_exp>
+	| <exclusive_or_exp> ^ <and_exp>
+(14.07) <and_exp> ::= <equality_exp>
+	| <and_exp> & <equality_exp>
+(14.08) <equality_exp> ::= <relational_exp>
+	| <equality_exp> == <relational_exp>
+	| <equality_exp> != <relational_exp>
+(14.09) <relational_exp> ::= <shift_exp>
+	| <relational_exp> <<> <shift_exp>
+	| <relational_exp> <>> <shift_exp>
+	| <relational_exp> <<=> <shift_exp>
+	| <relational_exp> <>=> <shift_exp>
+(14.10) <shift_exp> ::= <additive_exp>
+	| <shift_exp> <<<> <additive_exp>
+	| <shift_exp> <>>> <additive_exp>
+(14.11) <additive_exp> ::= <multiplicative_exp>
+	| <additive_exp> + <multiplicative_exp>
+	| <additive_exp> - <multiplicative_exp>
+
+(14.12) <multiplicative_exp> ::= <unary_exp>
+	| <multiplicative_exp> * <unary_exp>
+	| <multiplicative_exp> / <unary_exp>
+	| <multiplicative_exp> % <unary_exp>
+(14.13) <unary_exp> ::= <primary_exp>
+	| + <primary_exp>
+	| - <primary_exp>
+	| ~ <primary_exp>
+	| ! <primary_exp>
+(14.14) <primary_exp> ::= <Integer_literal>
+	| <Identifier>
+	| '(' <const_exp> ')'
+(15) <string> ::= "[<Character>] ... "
+(16) <character_constant> ::= '<Character>'
+(17) <type_declarator> ::= typedef [ <type_attribute_list> ] <type_spec> 
+	<declarators>
+(18) <type_attribute_list> ::= <[> <type_attribute> 
+	[ , <type_attribute> ] ... <]>
+(19) <type_spec> ::= <simple_type_spec>
+	| <constructed_type_spec>
+(20) <simple_type_spec> ::= <base_type_spec> 
+	| <predefined_type_spec>
+	| <Identifier>
+(21) <declarators> ::= <declarator> [ , <declarator> ] ...
+(23) <declarator> ::= <pointer_opt> <direct_declarator>
+(24) <direct_declarator> ::= <Identifier> 
+	| ( <declarator> ) 
+	| <array_declarator> 
+	| <function_declarator> 
+(26) <tagged_declarator> ::= <tagged_struct_declarator> 
+	| <tagged_union_declarator>
+(27) <base_type_spec> ::= <floating_pt_type> 
+	| <integer_type>
+	| <char_type>
+	| <boolean_type>
+	| <byte_type>
+	| <void_type>
+	| <handle_type>
+(28) <floating_pt_type> ::= float
+	| double
+(29) <integer_type> ::= <primitive_integer_type>
+	| hyper [unsigned] [int]
+	| unsigned hyper [int]
+(29.1) <primitive_integer_type> ::= <signed_integer> 
+	| <unsigned_integer>
+(30) <signed_integer> ::= <integer_size> [ int ]
+(31) <unsigned_integer> ::= <integer_size> unsigned [ int ]
+	| unsigned <integer_size> [ int ]
+(32) <integer_size> ::= long
+	| short
+	| small
+(33) <char_type> ::= [ unsigned ] char
+(34) <boolean_type> ::= boolean
+(35) <byte_type> ::= byte
+(36) <void_type> ::= void
+(37) <handle_type> ::= handle_t
+(38) <constructed_type_spec> ::= <struct_type> 
+	| <union_type> 
+	| <enumeration_type> 
+	| <tagged_declarator>
+	| <pipe_type>
+(39) <tagged_struct_declarator> ::= struct <tag> 
+	| <tagged_struct>
+(40) <struct_type> ::= struct  { <member_list> }
+(41) <tagged_struct> ::= struct <tag> { <member_list> }
+(42) <tag> ::= <Identifier>
+(43) <member_list> ::= <member> [ <member> ] ...
+(44) <member> ::= <field_declarator> ;
+(45) <field_declarator> ::= [ <field_attribute_list> ] <type_spec> 
+	<declarators>
+(46) <field_attribute_list> ::= <[> <field_attribute> 
+	[ , <field_attribute> ] ... <]>
+(47) <tagged_union_declarator> ::= union <tag> 
+	| <tagged_union>
+(48) <union_type> ::= union <union_switch> { <union_body> } 
+	| union { <union_body_n_e> }
+(48.1) <union_switch> ::= switch ( <switch_type_spec> <Identifier> )
+	[ <union_name> ]
+(49) <switch_type_spec> ::= <primitive_integer_type> 
+	| <char_type>
+	| <boolean_type>
+	| <Identifier>
+(50) <tagged_union> ::= union <tag> <union_switch> { <union_body> }
+	| union <tag> { <union_body_n_e> }
+(51) <union_name> ::= <Identifier>
+(52) <union_body> ::= <union_case> [  <union_case> ] ...
+(52.1) <union_body_n_e> ::=  <union_case_n_e> [ <union_case_n_e> ] ...
+(53) <union_case> ::= <union_case_label> [ <union_case_label> ] ... 
+	<union_arm>
+	| <default_case>
+(53.1) <union_case_n_e> ::= <union_case_label_n_e> <union_arm>
+	| <default_case_n_e>
+(54) <union_case_label> ::= case <const_exp> :
+(54.1) <union_case_label_n_e> ::= <[> case ( <const_exp> 
+	[ , <const_exp> ] ... ) <]>
+(55) <default_case> ::= default : <union_arm>
+(55.1) <default_case_n_e> ::= <[> default <]> <union_arm>
+(55.2) <union_arm> ::= [ <field_declarator> ] ;
+(55.3) <union_type_switch_attr> ::= switch_type ( <switch_type_spec> )
+(55.4) <union_instance_switch_attr> ::= switch_is ( <attr_var> )
+(57) <enumeration_type> ::= enum { <Identifier> [ , <Identifier> ] ... }
+(58) <pipe_type> ::= pipe <type_spec>
+(59) <array_declarator> ::= <direct_declarator> <array_bounds_declarator>
+(61) <array_bounds_declarator> ::= <[> [ <array_bound> ] <]>
+	| <[> <array_bounds_pair> <]>
+(62) <array_bounds_pair> ::= <array_bound> .. <array_bound> 
+(63) <array_bound> ::= *  
+	| <integer_const_exp> 
+	| <Identifier>
+(64) <type_attribute> ::= transmit_as ( <xmit_type> ) 
+	| handle
+	| <usage_attribute>
+	| <union_type_switch_attr>
+	| <ptr_attr>
+(65) <usage_attribute> ::= string 
+	| context_handle
+(66) <xmit_type> ::= <simple_type_spec> 
+(67) <field_attribute> ::= first_is ( <attr_var_list> ) 
+	| last_is ( <attr_var_list> ) 
+	| length_is ( <attr_var_list> ) 
+	| min_is ( <attr_var_list> ) 
+	| max_is ( <attr_var_list> ) 
+	| size_is ( <attr_var_list> ) 
+	| <usage_attribute> 
+	| <union_instance_switch_attr> 
+	| ignore 
+	| <ptr_attr>
+(68) <attr_var_list> ::= <attr_var> [ , <attr_var> ] ...
+(69) <attr_var> ::= [ [ * ] <Identifier> ] 
+(70) <pointer_opt> ::= [<pointer>]
+(70.1) <ptr_attr> ::= ref
+	| unique
+	| ptr
+(70.2) <pointer> ::= *... 
+(71) <op_declarator> ::= [ <operation_attributes> ] 
+	<simple_type_spec> <Identifier> <param_declarators>
+(72) <operation_attributes> ::= <[>  <operation_attribute> 
+	[ , <operation_attribute> ] ... <]>
+(73) <operation_attribute> ::= idempotent 
+	| broadcast 
+	| maybe 
+	| reflect_deletions
+	| <usage_attribute>
+	| <ptr_attr>
+(74) <param_declarators> ::= ( [ <param_declarator> 
+	[ , <param_declarator> ] ... ] )
+	| ( void )
+(75) <param_declarator> ::= <param_attributes> <type_spec> <declarator>
+(76) <param_attributes> ::= <[> <param_attribute> 
+	[ , <param_attribute> ] ... <]>
+(77) <param_attribute> ::= <directional_attribute>  
+	| <field_attribute>
+(78) <directional_attribute> ::= in  
+	| out 
+(79) <function_declarator> ::= <direct_declarator> <param_declarators>
+(80) <predefined_type_spec> ::= error_status_t 
+	| <international_character_type>
+(81) <international_character_type> ::= ISO_LATIN_1 
+	| ISO_MULTI_LINGUAL
+	| ISO_UCS

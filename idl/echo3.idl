@@ -1,0 +1,13 @@
+[ uuid(5ab2e9b4-3d48-11d2-9ea4-80c5140aaa77),
+  version(1.0),
+  pointer_default(ptr)
+]
+
+interface echo {
+    //My comment
+  /*
+   * TYPES:
+      */
+
+  typedef [ptr, string] char * string_t;
+}
